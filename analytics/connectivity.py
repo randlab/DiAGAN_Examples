@@ -9,39 +9,45 @@ NB_EXAMPLES=100
 try:
     FOLDER_NAME = sys.argv[1]
 except:
-    print("Correct usage : python3 connectivity.py <Balls|F42A|Houthuys|Strebelle>")
+    print("Correct usage : python3 connectivity.py <Balls|F42A|Sand_deposit|Channels>")
 
-for folder in ["mps","real","gan"]:
-    nb_file=0
-    connectivity_X = {}
-    connectivity_Y = {}
-    for file in os.listdir(folder):
-        nb_file+=1
-        print(nb_file)
-        image = mpstool.img.Image.fromPng(os.path.join(folder,file))
-        image.threshold(thresholds=[127],values=[0,255])
-        connX = mpstool.connectivity.get_function(image, axis=1)
-        connectivity_X = { k: connectivity_X.get(k, 0) + connX.get(k, 0) for k in set(connX) }
-        connY = mpstool.connectivity.get_function(image, axis=0)
-        connectivity_Y = { k: connectivity_Y.get(k, 0) + connY.get(k, 0) for k in set(connY) }
-        if nb_file==NB_EXAMPLES:
-            break
-    connectivity_X = {k: connectivity_X.get(k,0)/nb_file for k in connectivity_X.keys()}
-    connectivity_Y = {k: connectivity_Y.get(k,0)/nb_file for k in connectivity_Y.keys()}
-    print(connectivity_X)
-    categories = mpstool.connectivity.get_categories(image)
-    for category in categories:
-        plt.plot(connectivity_X[category])
-    plt.title(folder)
-    plt.legend(categories)
-    plt.xlabel('distance (pixels)')
-    plt.ylabel('connectivity along X axis')
-    plt.show()
+if FOLDER_NAME in {"Balls", "F42A"}:
+    for folder in ["real","gan"]: #"mps"
+        print("Computing stats for {} samples".format(folder))
+        path = os.path.join(FOLDER_NAME,folder)
+        nb_file = len(os.listdir(path))
+        connectivity_X = {}
+        connectivity_Y = {}
+        connectivity_Z = {}
+        for file in os.listdir(path):
+            file_path = os.path.join(path,file)
+            nb_file+=1
+            image = mpstool.img.Image.fromVox(file_path)
+            image.threshold(thresholds=[127],values=[0,255])
+            connX = mpstool.connectivity.get_function(image, axis=0)
+            connY = mpstool.connectivity.get_function(image, axis=1)
+            connZ = mpstool.connectivity.get_function(image, axis=2)
+            connectivity_X = { k: connectivity_X.get(k, 0) + connX.get(k, 0) for k in set(connX) }
+            connectivity_Y = { k: connectivity_Y.get(k, 0) + connY.get(k, 0) for k in set(connY) }
+            connectivity_Z = { k: connectivity_Z.get(k, 0) + connZ.get(k, 0) for k in set(connZ) }
 
-    categories = mpstool.connectivity.get_categories(image)
-    for category in categories:
-        plt.plot(connectivity_Y[category])
-    plt.legend(categories)
-    plt.xlabel('distance (pixels)')
-    plt.ylabel('connectivity along Y axis')
-    plt.show()
+        connectivity_X = {k: connectivity_X.get(k,0)/nb_file for k in connectivity_X.keys()}
+        connectivity_Y = {k: connectivity_Y.get(k,0)/nb_file for k in connectivity_Y.keys()}
+        connectivity_Z = {k: connectivity_Z.get(k,0)/nb_file for k in connectivity_Z.keys()}
+        categories = mpstool.connectivity.get_categories(image)
+        plt.plot(connectivity_X[0])
+        plt.plot(connectivity_Y[0])
+        plt.plot(connectivity_Z[0])
+
+        plt.title(folder)
+        plt.legend(["X", "Y", "Z"])
+        plt.xlabel('distance (pixels)')
+        plt.ylabel('connectivity along X axis')
+        plt.show()
+
+
+elif FOLDER_NAME=="Channels":
+    pass
+
+elif FOLDER_NAME=="Sand_deposit":
+    pass

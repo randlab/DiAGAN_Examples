@@ -3,4 +3,4 @@
 
 Repository accompagning this article : *TODO*
 
-Collection of pretrained models, training images and output samples accompagning the DiAGAN repository : https://randlab/UniNE-CHYN/DiAGAN
+Collection of pretrained models, training images and output samples accompagning the DiAGAN repository : https://github.com/randlab/DiAGAN

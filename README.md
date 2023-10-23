@@ -4,7 +4,7 @@ Collection of pretrained models, training images and output samples accompagning
 
 Repository accompagning this article :
 
-###3D Geological Image Synthesis From 2D Examples Using Generative Adversarial Networks
+**3D Geological Image Synthesis From 2D Examples Using Generative Adversarial Networks**
 _Guillaume Coiffier, Philippe Renard, Sylvain Lefebvre_
 
 https://www.frontiersin.org/journals/water/articles/10.3389/frwa.2020.560598/full
